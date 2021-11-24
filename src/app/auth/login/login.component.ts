@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder} from '@angular/forms';
+import {AuthService} from '../shared/auth.service';
+import {LoginDto} from '../shared/login.dto';
 
 @Component({
   selector: 'app-inno-tech-login',
@@ -12,13 +14,18 @@ export class LoginComponent implements OnInit {
     password: ['']
   });
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private _auth: AuthService) {
   }
 
   ngOnInit(): void {
   }
 
   login() {
-    console.log('logininfo: ', this.loginForm.value);
+    const loginDto = this.loginForm.value as LoginDto;
+    this._auth.login(loginDto)
+      .subscribe(token => {
+        console.log('Token: ', token);
+      });
   }
 }
