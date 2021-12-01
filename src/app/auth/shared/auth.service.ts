@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {LoginDto} from './login.dto';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {TokenDto} from './token.dto';
 import {environment} from '../../../environments/environment';
-import {tap} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
 
 const jwtToken = 'jwtToken';
 
@@ -34,8 +34,9 @@ export class AuthService {
     return localStorage.getItem(jwtToken);
   }
 
-  logout() {
+  logout(): Observable<boolean> {
     localStorage.removeItem(jwtToken);
     this.isLoggedIn$.next(null);
+    return of(true).pipe(take(1));
   }
 }
